@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { COULEURS } from '../styles/couleurs';
 
-export default function TacheCard({ titre, categorie, terminee }) {
+export default function TacheCard({ titre, categorie, terminee, onPress, onBasculer, onSupprimer }) {
   return (
-    <View style={styles.carte}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.carte, pressed && styles.cartePressee]}
+    >
       <View style={styles.ligne}>
         <Text style={styles.titre} numberOfLines={2}>
           {titre}
@@ -13,10 +16,21 @@ export default function TacheCard({ titre, categorie, terminee }) {
           <Text style={styles.badgeTexte}>{categorie}</Text>
         </View>
       </View>
-      <Text style={[styles.statut, terminee ? styles.statutTermine : styles.statutAFaire]}>
-        {terminee ? '✓ Terminée' : '○ À faire'}
-      </Text>
-    </View>
+
+      <View style={styles.ligne}>
+        <Pressable onPress={onBasculer} hitSlop={8}>
+          <Text style={[styles.statut, terminee ? styles.statutTermine : styles.statutAFaire]}>
+            {terminee ? '✓ Terminée' : '○ À faire'}
+          </Text>
+        </Pressable>
+
+        {onSupprimer && (
+          <Pressable onPress={onSupprimer} hitSlop={8}>
+            <Text style={styles.supprimer}>Supprimer</Text>
+          </Pressable>
+        )}
+      </View>
+    </Pressable>
   );
 }
 
@@ -26,12 +40,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 14,
     paddingHorizontal: 16,
-    gap: 6,
+    gap: 8,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 1,
+  },
+  cartePressee: {
+    opacity: 0.7,
   },
   ligne: {
     flexDirection: 'row',
@@ -64,5 +81,9 @@ const styles = StyleSheet.create({
   },
   statutAFaire: {
     color: COULEURS.muted,
+  },
+  supprimer: {
+    fontSize: 13,
+    color: COULEURS.danger,
   },
 });
