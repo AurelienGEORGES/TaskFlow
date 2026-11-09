@@ -6,4 +6,6 @@ export const COULEURS = {
   muted: '#8B8BA3',
   carte: '#FFFFFF',
   succes: '#4CAF50',
+  danger: '#D9534F',
+  bordure: '#DDDDE5',
 };
